@@ -1,0 +1,59 @@
+---
+title: "pstat296 trial"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, cache=TRUE}
+setwd("/Users/mingzhang/Desktop/pstat296")
+library(readxl)
+tb1 = read_xlsx("Ucsb_06302018Part1.xlsx")
+tb2 = read_xlsx("Ucsb_06302018Part2.xlsx")
+library(tidyverse)
+```
+
+```{r}
+tb1 = as.tibble(tb1)
+tb2 = as.tibble(tb2)
+table(tb1$ProgramYear)
+table(tb2$ProgramYear)
+```
+
+```{r}
+table(tb1$`Evaluation Date`)
+table(tb2$`Evaluation Date`)
+
+```
+
+```{r}
+table(tb1$`Claim Type`)
+table(tb2$`Claim Type`)
+```
+
+```{r}
+u1=unique(tb1$`Claim Type`)
+u2=unique(tb2$`Claim Type`)
+unique(c(u1,u2))
+```
+
+```{r}
+table(tb1$`Settlement Type`)
+table(tb2$`Settlement Type`)
+```
+
+```{r}
+tb1$rowID <- seq.int(nrow(tb1))
+tb2$rowid <- seq.int(nrow(tb2))
+names(tb2)[names(tb2)=="rowid"] = "rowID"
+```
+
+```{r}
+tb1 = tb1[,c(118,1:117)]
+tb2 = tb2[,c(118,1:117)]
+```
+
+
+
