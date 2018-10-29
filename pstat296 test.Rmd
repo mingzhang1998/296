@@ -56,4 +56,20 @@ tb2 = tb2[,c(118,1:117)]
 ```
 
 
+```{r}
+library(dplyr)
+```
+
+
+Keeping the following Claim Types only:  Temp Disability, Future Medical, Indemnity and Death. 
+```{r}
+tb1 = filter(tb1, `Claim Type` %in% c("Temp Disability","Future Medical"))
+tb2 = filter(tb2, `Claim Type` %in% c("Temp Disability","Future Medical", "Indemnity", "Death"))
+```
+
+
+Delete data that has program year 1994-1995 or prior.
+```{r}
+tb2 = filter(tb2, ProgramYear %in% c("1995-1996","1996-1997", "1997-1998","1998-1999","1999-2000","2000-2001","2001-2002","2002-2003","2003-2004","2004-2005","2005-2006","2006-2007","2007-2008","2008-2009","2009-2010","2010-2011","2011-2012","2012-2013","2013-2014","2014-2015","2015-2016","2016-2017","2017-2018"))
+```
 
