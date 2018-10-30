@@ -1,0 +1,76 @@
+---
+title: "PSTAT 296A - dataset"
+author: "Kristy Cheng"
+date: "10/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r reading files, cache=TRUE}
+setwd("/Users/kristy/Desktop")
+library(readxl)
+library(tidyverse)
+
+tb1 = read_xlsx("Ucsb_06302018Part1_RowID.xlsx")
+tb2 = read_xlsx("Ucsb_06302018Part2_RowID.xlsx")
+```
+
+```{r}
+tb1 = as.tibble(tb1)
+tb2 = as.tibble(tb2)
+table(tb1$ProgramYear)
+table(tb2$ProgramYear)
+```
+
+```{r Evaluation Date}
+#summary of evaluation date in part 1 and part 2
+table(tb1$`Evaluation Date`)
+table(tb2$`Evaluation Date`)
+```
+
+```{r Claim Type}
+#summary of Claim Type in part 1 and part 2
+table(tb1$`Claim Type`)
+table(tb2$`Claim Type`)
+
+#Unique categories of Claim Type 
+u1=unique(tb1$`Claim Type`)
+u2=unique(tb2$`Claim Type`)
+unique(c(u1,u2))
+```
+```{r Settlement Type}
+#Summary of Settlement Type in part 1 and 2
+table(tb1$`Settlement Type`)
+table(tb2$`Settlement Type`)
+```
+
+{r inserts row ID}
+tb1$rowID <- seq.int(nrow(tb1))
+tb2$rowid <- seq.int(nrow(tb2))
+names(tb2)[names(tb2)=="rowid"] = "rowID"
+```
+
+```{r select variables}
+tb1_2 = tb1[,c(118,1:117)]
+tb2_2 = tb2[,c(118,1:117)]
+```
+
+
+```{r}
+library(dplyr)
+```
+
+
+Keeping the following Claim Types only:  Temp Disability, Future Medical, Indemnity and Death. 
+```{r}
+tb1_2 = filter(tb1_2, `Claim Type` %in% c("Temp Disability","Future Medical"))
+tb2_2 = filter(tb2_2, `Claim Type` %in% c("Temp Disability","Future Medical", "Indemnity", "Death"))
+```
+
+Delete data that has program year 1994-1995 or prior. (no filtering needed for part 1)
+```{r}
+tb2_2 = filter(tb2_2, ProgramYear %in% c("1995-1996","1996-1997", "1997-1998","1998-1999","1999-2000","2000-2001","2001-2002","2002-2003","2003-2004","2004-2005","2005-2006","2006-2007","2007-2008","2008-2009","2009-2010","2010-2011","2011-2012","2012-2013","2013-2014","2014-2015","2015-2016","2016-2017","2017-2018"))
+```
