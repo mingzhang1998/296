@@ -51,7 +51,7 @@ table(tb2$`Settlement Type`)
 tb1$rowID <- seq.int(nrow(tb1))
 tb2$rowid <- seq.int(nrow(tb2))
 names(tb2)[names(tb2)=="rowid"] = "rowID"
-```
+
 
 ```{r select variables}
 tb1_2 = tb1[,c(118,1:117)]
