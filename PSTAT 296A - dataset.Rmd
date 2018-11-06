@@ -98,7 +98,7 @@ length(unique(c1))
 
 summary(tb_combine)
 
-#uns is a vector containing the number of unique values in each columns
+#number of unique values of each variable is appended to uns
 uns = NULL
 for(i in 1:118){
   ci = tb_combine[,i]
