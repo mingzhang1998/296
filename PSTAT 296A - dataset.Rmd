@@ -75,36 +75,43 @@ tb2_2 = filter(tb2_2, ProgramYear %in% c("1995-1996","1996-1997", "1997-1998","1
 ```
 
 ```{r reformat dates}
-
+#Transform variable "Date Received" into Date format
+tb2_2$`Date Received` = as.numeric(tb2_2$`Date Received`)
+tb2_2$`Date Received` = as.Date(tb2_2$`Date Received`, origin = "1899-12-30")
 ```
 
-```{r merge files}
-
+```{r combine files}
+#combine dataset part 1 and part 2
+tb_combine = rbind(tb1_2, tb2_2)
+head(tb_combine)
 ```
 
 ```{r check unique}
-#initiate variable c1
-dim(tb3)
-tb3 = as.data.frame(tb3)
-dim(tb3)
-c1=tb3[,1]
+#dimension of the combined dataset
+dim(tb_combine)
+tb_combine = as.data.frame(tb_combine)
+dim(tb_combine)
+
+c1=tb_combine[,1]
 length(c1)
 length(unique(c1))
 
-summary(tb3)
+summary(tb_combine)
 
-#number of unique values of each variable is append to uns
+#uns is a vector containing the number of unique values in each columns
 uns = NULL
 for(i in 1:118){
-  ci = tb1_2[,i]; 
+  ci = tb_combine[,i]
   uns = c(uns, length(unique(ci)))
   }
 uns
 
-#tab3_1 eliminates variable that contains only one value across observations
-tab3_1 = tb3[,-which(uns == 1)]
-```
+#tb_combine2 eliminates variables with only one single value across observations(i.e. uns == 1)
+tb_combine2 = tb_combine[,-which(uns == 1)]
+dim(tb_combine2)
 
+'The for loop creates vector col_delete, 
+which contains the column number that is being deleted'
 col_delete = NULL
 for (i in 1:118) {
   if (uns[i] == 1) {
@@ -113,5 +120,5 @@ for (i in 1:118) {
 }
 col_delete
 
-tb1_3 = tb1_2[,-which(uns==1)]
-table(tb1_2[,72])
+table(tb_combine[,102])
+```
