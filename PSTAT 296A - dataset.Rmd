@@ -14,8 +14,8 @@ setwd("/Users/kristy/Desktop")
 library(readxl)
 library(tidyverse)
 
-tb1 = read_xlsx("Ucsb_06302018Part1_RowID.xlsx")
-tb2 = read_xlsx("Ucsb_06302018Part2_RowID.xlsx")
+tb1 = read_xlsx("Ucsb_06302018Part1_RowID_Updated.xlsx")
+tb2 = read_xlsx("Ucsb_06302018Part2_RowID_Updated.xlsx")
 ```
 
 ```{r}
