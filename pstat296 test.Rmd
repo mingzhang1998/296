@@ -44,15 +44,33 @@ table(tb1$`Settlement Type`)
 table(tb2$`Settlement Type`)
 ```
 
+
 ```{r}
-tb1$rowID <- seq.int(nrow(tb1))
-tb2$rowid <- seq.int(nrow(tb2))
-names(tb2)[names(tb2)=="rowid"] = "rowID"
+tb2$`Date Received`=as.numeric(tb2$`Date Received`)
+tb2$`Date Received`=as.Date(tb2$`Date Received`,origin = "1899-12-30")
+tb.new = rbind(tb1,tb2)
+head(tb.new)
 ```
 
 ```{r}
-tb1 = tb1[,c(118,1:117)]
-tb2 = tb2[,c(118,1:117)]
+table(tb.new$`Settlement Type`)
+```
+
+
+
+
+adding new column 
+```{r}
+df1 = tb1
+df2 = tb2
+df1$rowID <- seq.int(nrow(df1))
+df2$rowid <- seq.int(nrow(df2))
+names(df2)[names(df2)=="rowid"] = "rowID"
+```
+
+```{r}
+df1 = df1[,c(118,1:117)]
+df2 = df2[,c(118,1:117)]
 ```
 
 
@@ -63,13 +81,95 @@ library(dplyr)
 
 Keeping the following Claim Types only:  Temp Disability, Future Medical, Indemnity and Death. 
 ```{r}
-tb1 = filter(tb1, `Claim Type` %in% c("Temp Disability","Future Medical"))
-tb2 = filter(tb2, `Claim Type` %in% c("Temp Disability","Future Medical", "Indemnity", "Death"))
+df1 = filter(df1, `Claim Type` %in% c("Temp Disability","Future Medical"))
+df2 = filter(df2, `Claim Type` %in% c("Temp Disability","Future Medical", "Indemnity", "Death"))
 ```
 
 
 Delete data that has program year 1994-1995 or prior.
 ```{r}
-tb2 = filter(tb2, ProgramYear %in% c("1995-1996","1996-1997", "1997-1998","1998-1999","1999-2000","2000-2001","2001-2002","2002-2003","2003-2004","2004-2005","2005-2006","2006-2007","2007-2008","2008-2009","2009-2010","2010-2011","2011-2012","2012-2013","2013-2014","2014-2015","2015-2016","2016-2017","2017-2018"))
+df2 = filter(df2, ProgramYear %in% c("1995-1996","1996-1997", "1997-1998","1998-1999","1999-2000","2000-2001","2001-2002","2002-2003","2003-2004","2004-2005","2005-2006","2006-2007","2007-2008","2008-2009","2009-2010","2010-2011","2011-2012","2012-2013","2013-2014","2014-2015","2015-2016","2016-2017","2017-2018"))
+```
+
+```{r}
+df.new = rbind(df1,df2)
+#df.new[[6]]
+#df.new$`Entity ID`
+#as.tibble(df.new[,6])
+#df.new$`Entity ID`
+uns = vector()
+for(i in 1:118){
+  ci = df.new[[i]]
+  uns = c(uns, length(unique(ci)))
+  }
+uns
+col_delete = NULL
+for (i in 1:118) {
+  if (uns[i] == 1) {
+    col_delete = c(col_delete, i)
+  }
+}
+col_delete
+```
+
+
+```{r}
+grep("Date of Loss", colnames(tb1))
+subset(df1, select = "Date of Loss")
+dtl1 = df1[,19]
+dtl2 = df2[,19]
+class(dtl1[[1]])
+is.POSIXct <- function(x) inherits(x, "POSIXct")
+is.POSIXct(dtl2[[1]])
+sapply(df1, is.POSIXct)
+sapply(df2, is.POSIXct)
+grep("Date of Loss", colnames(df1))
+grep("Date Reported", colnames(df1))
+grep("Date Received", colnames(df1))
+grep("Date Entered", colnames(df1))
+grep("Evaluation Date", colnames(df1))
+dtl1
+
+#tb1.new = subset(tb1,select = -c(`Date Received`))
+#tb2.new = subset(tb2, select = -c(`Date Received`))
+#tb.new = rbind(tb1.new, tb2.new)
+#head(tb.new)
+#Date.Closed = as.numeric(tb.new$`Date Closed`)
+#Date.Closed[1]
+#as.Date(Date.Closed, origin = "1899-12-30")
+#which(tb.new$`Date Closed` ==36494)
+#tb.new$rowID[1]
+
+```
+
+
+
+```{r}
+for(i in c(34,64,65,71,85,101,102,103,106,107,108,109,112)){
+  print(colnames(df.new)[i])
+}
+df.new = subset(df.new, select = -c(34,64,65,71,85,101,102,103,106,107,108,109,112))
+```
+
+
+```{r}
+df.new = filter(df.new, `Claim Status at 6-30-2018` %in% c("Closed", "Open", "ReOpened-Closed", "ReOpened-Open"))
+```
+
+
+```{r}
+head(df.new)
+```
+
+```{r}
+structure <-  function(vec){
+  print(table(vec))
+  print(unique(vec))
+  print(length(unique(vec)))
+}
+```
+
+```{r}
+write_excel_csv(df.new, "/Users/mingzhang/Desktop/pstat296/updated_file20181126.csv")
 ```
 
